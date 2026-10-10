@@ -11,33 +11,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Calculator App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const CalculatorApp(title: 'Calculator App'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+class CalculatorApp extends StatefulWidget {
+  const CalculatorApp({super.key, required this.title});
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -50,22 +34,48 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<CalculatorApp> createState() => _CalculatorAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
+class _CalculatorAppState extends State<CalculatorApp> {
+  String display = "0";       // Current input or result
+  String operator = "";      // Pending +, -, *, or /
+  double? storedValue;       // First operand or running total
+  bool waiting = false;      // Next digit starts the second operand
+  bool hasResult = false;    // Next digit starts a new calculation
+  void inputDigit(String digit) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      // TODO: Replace or append input based on the flags.
+      // TODO: Handle "0" and ".".
     });
   }
+
+  void chooseOperator(String nextOperator) {
+    setState(() {
+      // TODO: Apply an existing operation, or store the first operand.
+      // TODO: Save nextOperator and wait for the next number.
+    });
+  }
+
+  void applyPendingOperation() {
+    // TODO: Read storedValue, operator, and double.tryParse(display).
+    // TODO: Use a switch for +, -, *, and /.
+    // TODO: Update the stored value and format the display.
+  }
+
+  void calculate() {
+    setState(() {
+      // TODO: Check that both operands are available.
+      // TODO: Apply the operation and mark the result.
+    });
+  }
+
+  void clear() {
+    setState(() {
+      // TODO: Reset every state field.
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,16 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             const Text('You have pushed the button this many times:'),
             Text(
-              '$_counter',
+              'asdf',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
