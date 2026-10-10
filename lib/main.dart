@@ -76,6 +76,31 @@ class _CalculatorAppState extends State<CalculatorApp> {
     });
   }
 
+  void negate() {
+    setState(() {
+      // TODO: Negate current number
+    });
+  }
+  Widget calculatorButton(
+    String label,
+    VoidCallback onPressed, {
+    int flex = 1,
+  }) {
+    return Expanded(
+      flex: flex,
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: SizedBox(
+          height: 64,
+          child: ElevatedButton(
+            onPressed: onPressed,
+            child: Text(label, style: const TextStyle(fontSize: 24)),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,29 +120,59 @@ class _CalculatorAppState extends State<CalculatorApp> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body:Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              'asdf',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: Text(
+                    display,
+                    style: const TextStyle(fontSize: 48),
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                calculatorButton("AC", clear),
+                calculatorButton("+/-", negate),
+                calculatorButton("%", () => chooseOperator("%")),
+                calculatorButton("÷", () => chooseOperator("/")),
+              ],
+            ),
+            Row(
+              children: [
+                calculatorButton("7", () => inputDigit("7")),
+                calculatorButton("8", () => inputDigit("8")),
+                calculatorButton("9", () => inputDigit("9")),
+                calculatorButton("×", () => chooseOperator("*")),
+              ],
+            ),
+            Row(
+              children: [
+                calculatorButton("4", () => inputDigit("4")),
+                calculatorButton("5", () => inputDigit("5")),
+                calculatorButton("6", () => inputDigit("6")),
+                calculatorButton("−", () => chooseOperator("-")),
+              ],
+            ),
+            Row(
+              children: [
+                calculatorButton("1", () => inputDigit("1")),
+                calculatorButton("2", () => inputDigit("2")),
+                calculatorButton("3", () => inputDigit("3")),
+                calculatorButton("+", () => chooseOperator("+")),
+              ],
+            ),
+            Row(
+              children: [
+                calculatorButton("0", () => inputDigit("0"), flex: 3),
+                calculatorButton("=", calculate),
+              ],
             ),
           ],
         ),
