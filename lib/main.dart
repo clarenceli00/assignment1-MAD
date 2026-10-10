@@ -45,42 +45,100 @@ class _CalculatorAppState extends State<CalculatorApp> {
   bool hasResult = false;    // Next digit starts a new calculation
   void inputDigit(String digit) {
     setState(() {
-      // TODO: Replace or append input based on the flags.
-      // TODO: Handle "0" and ".".
+      if (hasResult) {
+        storedValue = null;
+        operator = "";
+      }
+
+      if (waiting || hasResult || display == "0") {
+        display = digit;
+      } else {
+        display += digit;
+      }
+
+      waiting = false;
+      hasResult = false;
     });
   }
 
   void chooseOperator(String nextOperator) {
     setState(() {
-      // TODO: Apply an existing operation, or store the first operand.
-      // TODO: Save nextOperator and wait for the next number.
+      if (operator.isNotEmpty && !waiting) {
+        applyPendingOperation();
+      } else {
+        storedValue = double.tryParse(display);
+      }
+
+      operator = nextOperator;
+      waiting = true;
+      hasResult = false;
     });
   }
 
   void applyPendingOperation() {
-    // TODO: Read storedValue, operator, and double.tryParse(display).
-    // TODO: Use a switch for +, -, *, and /.
-    // TODO: Update the stored value and format the display.
+    final first = storedValue;
+    final currentVal = double.tryParse(display);
+
+    if (first == null || currentVal == null) {
+      return;
+    }
+    double result;
+    switch (operator) {
+      case "+":
+        result = first + currentVal;
+        break;
+      case "-":
+        result = first - currentVal;
+        break;
+      case "*":
+        result = first * currentVal;
+        break;
+      case "/":
+        result = first / currentVal;
+        break;
+      case "%":
+        result = first % currentVal;
+        break;
+      default:
+        return;
+    }
+    storedValue = result;
+    display = result.toString();
   }
 
   void calculate() {
     setState(() {
-      // TODO: Check that both operands are available.
-      // TODO: Apply the operation and mark the result.
+      if (operator.isEmpty || waiting) return;
+
+      applyPendingOperation();
+      operator = "";
+      waiting = false;
+      hasResult = true;
     });
   }
 
   void clear() {
     setState(() {
-      // TODO: Reset every state field.
+      // Reset every state field.
+        display = "0";
+        operator = "";
+        storedValue = null;
+        waiting = true;
+        hasResult = false;
     });
   }
 
   void negate() {
     setState(() {
-      // TODO: Negate current number
+      final val = storedValue;
+      if(val == null){
+        return;
+      }
+      storedValue = -val;
+      display = storedValue.toString();
     });
   }
+
   Widget calculatorButton(
     String label,
     VoidCallback onPressed, {
@@ -104,20 +162,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body:Padding(
